@@ -84,9 +84,22 @@ public class Gui extends JFrame {
 				return;
 			}
 			s1 = new Sudoku(field);
+			if(!checkIfOk()){
+				return;
+			}
 			solveSudoku();
 			showNbrsInGui();
 
+		}
+		
+		// kollar om talen inmatade av användaren är ok
+		private boolean checkIfOk() { 
+			if(!s1.checkIfValuesOk()){
+				JOptionPane.showMessageDialog(sudoku, "Value error",
+						"Error", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			return true;
 		}
 
 		private void solveSudoku() {

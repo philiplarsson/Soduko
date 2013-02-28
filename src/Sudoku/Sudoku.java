@@ -6,16 +6,16 @@ public class Sudoku {
 	public Sudoku() {
 		field = new int[9][9];
 	}
-	
-	public Sudoku(int[][] field){
+
+	public Sudoku(int[][] field) {
 		this.field = field;
 	}
 
 	public boolean solve() {
 		return solve(0, 0);
 	}
-	
-	public int[][] getField(){
+
+	public int[][] getField() {
 		return field;
 	}
 
@@ -65,6 +65,24 @@ public class Sudoku {
 		return true;
 	}
 
+	// kontrollerar om alla värden som inte är 0 (dvs de värden som användaren har matat in) är ok
+	// detta för att förhindra att programmet tar lång tid på sig vid dubletter
+	public boolean checkIfValuesOk() {
+		int tal;
+		for (int i = 0; i < 9; i++) {
+			for (int k = 0; k < 9; k++) {
+				tal = field[i][k];
+				if(tal == 0){
+					// do nothing
+				} else if (!checkLegal(i, k, tal)) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
 	private boolean solve(int row, int column) {
 		if (column >= 9) {
 			return solve(++row, 0);
@@ -99,18 +117,15 @@ public class Sudoku {
 		return false;
 	}
 
+	
 
-
-	public static void main(String[] args) {
-		/*Sudoku s1 = new Sudoku();
-		s1.setup();
-		s1.printField();
-		System.out.println();
-		System.out.println("Sudokun status: " + s1.solve());
-		// s1.solve(0,0);
-		System.out.println();
-		s1.printField();
-		*/
-	}
+	/*
+	 * public static void main(String[] args) { Sudoku s1 = new Sudoku();
+	 * s1.setup(); s1.printField(); System.out.println();
+	 * System.out.println("Sudokun status: " + s1.solve()); // s1.solve(0,0);
+	 * System.out.println(); s1.printField();
+	 * 
+	 * }
+	 */
 
 }
