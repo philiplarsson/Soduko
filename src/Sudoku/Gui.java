@@ -20,7 +20,9 @@ public class Gui extends JFrame {
 	private List<JTextField> inputs;
 	private JPanel sudoku;
 	private JPanel buttons;
-
+	private int field[][];
+	private Sudoku s1;
+	
 	public Gui() {
 		initUI();
 	}
@@ -63,7 +65,39 @@ public class Gui extends JFrame {
 	class SolveButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
-			int[][] field = new int[9][9];
+			if(!loadNbrsFromGui()){
+				return;
+			}			
+			s1 = new Sudoku(field);
+			solveSudoku();
+			showNbrsInGui();
+			
+		
+		}
+
+		private void solveSudoku() {
+			if (!s1.solve()) {
+				JOptionPane.showMessageDialog(sudoku, "Sudoku is unsolvable",
+						"Error", JOptionPane.ERROR_MESSAGE);
+			}			
+		}
+
+		private void showNbrsInGui() {
+			field = s1.getField();
+			int j = 0;
+			for (int i = 0; i < 9; i++) {
+				for (int k = 0; k < 9; k++) {
+
+					JTextField tmp = inputs.get(j);
+					tmp.setText(Integer.toString(field[i][k]));
+					j++;
+				}
+			}
+			
+		}
+		// returns true if succeded
+		private boolean loadNbrsFromGui() {
+			field = new int[9][9];
 			int j = 0;
 			int tmpTal = 0;
 			for (int i = 0; i < 9; i++) {
@@ -82,7 +116,7 @@ public class Gui extends JFrame {
 											+ (k + 1), "Error",
 									JOptionPane.ERROR_MESSAGE);
 							tmp.setBackground(Color.WHITE);
-							return;
+							return false;
 						}
 
 					}
@@ -91,24 +125,7 @@ public class Gui extends JFrame {
 					j++;
 				}
 			}
-
-			Sudoku s1 = new Sudoku(field);
-			if (!s1.solve()) {
-				JOptionPane.showMessageDialog(sudoku, "Sudoku is unsolvable",
-						"Error", JOptionPane.ERROR_MESSAGE);
-			}
-
-			field = s1.getField();
-			j = 0;
-			for (int i = 0; i < 9; i++) {
-				for (int k = 0; k < 9; k++) {
-
-					JTextField tmp = inputs.get(j);
-					tmp.setText(Integer.toString(field[i][k]));
-					j++;
-				}
-			}
-
+			return true;
 		}
 	}
 
