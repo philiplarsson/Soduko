@@ -4,9 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +26,7 @@ public class Gui extends JFrame {
 
 	public Gui() {
 		initUI();
+
 	}
 
 	private void initUI() {
@@ -47,6 +48,12 @@ public class Gui extends JFrame {
 		JButton bClear = new JButton("Clear");
 		JButton bSolve = new JButton("Solve");
 
+		bClear.setToolTipText("Clears the entire soduko");
+		bSolve.setToolTipText("Solves the soduko");
+		
+		bClear.setMnemonic(KeyEvent.VK_C);
+		bSolve.setMnemonic(KeyEvent.VK_S);
+		
 		buttons.add(bClear);
 		buttons.add(bSolve);
 
@@ -56,11 +63,17 @@ public class Gui extends JFrame {
 		add(sudoku, BorderLayout.CENTER);
 		add(buttons, BorderLayout.SOUTH);
 
+		colorMiniSudoku();
 		setTitle("Sudoku");
 		setVisible(true);
 		setSize(500, 500);
-		setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png"));
+
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+	}
+
+	private void colorMiniSudoku() {
+		// to be done?
 
 	}
 
@@ -121,11 +134,10 @@ public class Gui extends JFrame {
 						}
 
 					}
-					if(tmpTal < 0 || tmpTal > 9){
+					if (tmpTal < 0 || tmpTal > 9) {
 						tmp.setBackground(Color.RED);
-						JOptionPane.showMessageDialog(sudoku,
-								"Wrong number " + (i + 1) + " col "
-										+ (k + 1), "Error",
+						JOptionPane.showMessageDialog(sudoku, "Wrong number "
+								+ (i + 1) + " col " + (k + 1), "Error",
 								JOptionPane.ERROR_MESSAGE);
 						tmp.setBackground(Color.WHITE);
 						return false;
