@@ -60,15 +60,25 @@ public class Gui extends JFrame {
 
 			int[][] field = new int[9][9];
 			int j = 0;
-			int tmpTal;
+			int tmpTal = 0;
 			for (int i = 0; i < 9; i++) {
 				for (int k = 0; k < 9; k++) {
 					JTextField tmp = inputs.get(j);
 					if (tmp.getText().trim().isEmpty()) {
 						tmpTal = 0;
 					} else {
-						tmpTal = Integer.parseInt(tmp.getText());
+						//tmpTal = Integer.parseInt(tmp.getText());
+						try {
+							tmpTal = Integer.parseInt(tmp.getText());
+						}
+						catch (NumberFormatException error) {
+							JOptionPane.showMessageDialog(sudoku, "Not number in row " + (i+1) + " col " + (k+1) , 
+								    "Error", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
 					}
+					//tmpTal = Integer.parseInt(tmp.getText());
 					field[i][k] = tmpTal;
 					j++;
 				}
