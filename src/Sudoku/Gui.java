@@ -1,7 +1,6 @@
 package Sudoku;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -17,12 +16,10 @@ import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class Gui extends JFrame {
-	private List<JTextField> inputs;
-	private JPanel sudoku;
-	private JPanel buttons;
-	private int field[][];
-	private Sudoku s1;
+	List<JTextField> inputs;
+	JPanel sudoku;
 	
+	//Hej, jas teasrwetwet
 	public Gui() {
 		initUI();
 	}
@@ -30,8 +27,8 @@ public class Gui extends JFrame {
 	private void initUI() {
 
 		sudoku = new JPanel();
-		buttons = new JPanel();
-
+		JPanel buttons = new JPanel();
+		
 		sudoku.setLayout(new GridLayout(9, 9));
 		buttons.setLayout(new FlowLayout());
 
@@ -54,7 +51,7 @@ public class Gui extends JFrame {
 
 		add(sudoku, BorderLayout.CENTER);
 		add(buttons, BorderLayout.SOUTH);
-
+		
 		setTitle("Sudoku");
 		setVisible(true);
 		setSize(500, 500);
@@ -65,40 +62,7 @@ public class Gui extends JFrame {
 	class SolveButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
-			if(!loadNbrsFromGui()){
-				return;
-			}			
-			s1 = new Sudoku(field);
-			solveSudoku();
-			showNbrsInGui();
-			
-		
-		}
-
-		private void solveSudoku() {
-			if (!s1.solve()) {
-				JOptionPane.showMessageDialog(sudoku, "Sudoku is unsolvable",
-						"Error", JOptionPane.ERROR_MESSAGE);
-			}			
-		}
-
-		private void showNbrsInGui() {
-			field = s1.getField();
-			int j = 0;
-			for (int i = 0; i < 9; i++) {
-				for (int k = 0; k < 9; k++) {
-
-					JTextField tmp = inputs.get(j);
-					tmp.setText(Integer.toString(field[i][k]));
-					j++;
-				}
-			}
-			
-		}
-		// returns true if succeded
-		private boolean loadNbrsFromGui() {
-			
-			field = new int[9][9];
+			int[][] field = new int[9][9];
 			int j = 0;
 			int tmpTal = 0;
 			for (int i = 0; i < 9; i++) {
@@ -107,26 +71,40 @@ public class Gui extends JFrame {
 					if (tmp.getText().trim().isEmpty()) {
 						tmpTal = 0;
 					} else {
-						// tmpTal = Integer.parseInt(tmp.getText());
+						//tmpTal = Integer.parseInt(tmp.getText());
 						try {
 							tmpTal = Integer.parseInt(tmp.getText());
-						} catch (NumberFormatException error) {
-							tmp.setBackground(Color.RED);
-							JOptionPane.showMessageDialog(sudoku,
-									"Not number in row " + (i + 1) + " col "
-											+ (k + 1), "Error",
-									JOptionPane.ERROR_MESSAGE);
-							tmp.setBackground(Color.WHITE);
-							return false;
 						}
-
+						catch (NumberFormatException error) {
+							JOptionPane.showMessageDialog(sudoku, "Not number in row " + (i+1) + " col " + (k+1) , 
+								    "Error", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
 					}
-					// tmpTal = Integer.parseInt(tmp.getText());
+					//tmpTal = Integer.parseInt(tmp.getText());
 					field[i][k] = tmpTal;
 					j++;
 				}
 			}
-			return true;
+			
+			Sudoku s1 = new Sudoku(field);
+			if(!s1.solve()){
+				JOptionPane.showMessageDialog(sudoku, "Sudoku is unsolvable", 
+					    "Error", JOptionPane.ERROR_MESSAGE);
+			}
+
+			field = s1.getField();
+			j = 0;
+			for (int i = 0; i < 9; i++) {
+				for (int k = 0; k < 9; k++) {
+
+					JTextField tmp = inputs.get(j);
+					tmp.setText(Integer.toString(field[i][k]));
+					j++;
+				}
+			}
+
 		}
 	}
 
