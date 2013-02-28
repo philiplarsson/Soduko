@@ -158,7 +158,7 @@ public class Sudoku {
 	}
 
 	public static void main(String[] args) {
-		Sudoku s1 = new Sudoku();
+		/*Sudoku s1 = new Sudoku();
 		s1.setup();
 		s1.printField();
 		System.out.println();
@@ -166,6 +166,7 @@ public class Sudoku {
 		// s1.solve(0,0);
 		System.out.println();
 		s1.printField();
+		*/
 	}
 
 }
