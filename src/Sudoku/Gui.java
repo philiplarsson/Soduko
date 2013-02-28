@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Gui extends JFrame {
 	private JPanel buttons;
 	private int field[][];
 	private Sudoku s1;
-	
+
 	public Gui() {
 		initUI();
 	}
@@ -58,6 +59,7 @@ public class Gui extends JFrame {
 		setTitle("Sudoku");
 		setVisible(true);
 		setSize(500, 500);
+		setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png"));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 	}
@@ -65,21 +67,20 @@ public class Gui extends JFrame {
 	class SolveButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
-			if(!loadNbrsFromGui()){
+			if (!loadNbrsFromGui()) {
 				return;
-			}			
+			}
 			s1 = new Sudoku(field);
 			solveSudoku();
 			showNbrsInGui();
-			
-		
+
 		}
 
 		private void solveSudoku() {
 			if (!s1.solve()) {
 				JOptionPane.showMessageDialog(sudoku, "Sudoku is unsolvable",
 						"Error", JOptionPane.ERROR_MESSAGE);
-			}			
+			}
 		}
 
 		private void showNbrsInGui() {
@@ -93,8 +94,9 @@ public class Gui extends JFrame {
 					j++;
 				}
 			}
-			
+
 		}
+
 		// returns true if succeded
 		private boolean loadNbrsFromGui() {
 			field = new int[9][9];
@@ -106,7 +108,6 @@ public class Gui extends JFrame {
 					if (tmp.getText().trim().isEmpty()) {
 						tmpTal = 0;
 					} else {
-						// tmpTal = Integer.parseInt(tmp.getText());
 						try {
 							tmpTal = Integer.parseInt(tmp.getText());
 						} catch (NumberFormatException error) {
@@ -120,7 +121,15 @@ public class Gui extends JFrame {
 						}
 
 					}
-					// tmpTal = Integer.parseInt(tmp.getText());
+					if(tmpTal < 0 || tmpTal > 9){
+						tmp.setBackground(Color.RED);
+						JOptionPane.showMessageDialog(sudoku,
+								"Wrong number " + (i + 1) + " col "
+										+ (k + 1), "Error",
+								JOptionPane.ERROR_MESSAGE);
+						tmp.setBackground(Color.WHITE);
+						return false;
+					}
 					field[i][k] = tmpTal;
 					j++;
 				}
