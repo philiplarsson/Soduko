@@ -19,7 +19,7 @@ public class Gui extends JFrame {
 	List<JTextField> inputs;
 	JPanel sudoku;
 	
-	
+	//Hej, jas teasrwetwet
 	public Gui() {
 		initUI();
 	}
