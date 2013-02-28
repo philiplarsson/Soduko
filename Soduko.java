@@ -1,7 +1,7 @@
 package Sudoku;
 
 public class Sudoku {
-  int[][] field;
+	int[][] field;
 
 	public Sudoku() {
 		field = new int[9][9];
@@ -10,10 +10,9 @@ public class Sudoku {
 	public boolean checkLegal(int row, int column, int n) {
 
 		// Kolla om n förekommer i det nuvarande rutfältet 3*3.
-//Rundas int ner? Kan man i så fall bestämma de olika större fälten genom att dela med tre?
-//Exempel: row/3 eller column/3 ger en int mellan 0-2.
-
-		
+		// Rundas int ner? Kan man i så fall bestämma de olika större fälten
+		// genom att dela med tre?
+		// Exempel: row/3 eller column/3 ger en int mellan 0-2.
 
 		// Kolla sin rad om n förekommer.
 		for (int i = 0; i <= 8; i++) {
@@ -22,7 +21,7 @@ public class Sudoku {
 			}
 		}
 
-		//Kolla om n förekommer i kolumnen.
+		// Kolla om n förekommer i kolumnen.
 		for (int i = 0; i <= 8; i++) {
 			if (field[i][column] == n) {
 				return false;
@@ -30,9 +29,8 @@ public class Sudoku {
 		}
 
 		/*
-		 * Om allt ok: 
-		 * sätta in talet i de grafiska gränssnittet
-		 * returnera true
+		 * Om allt ok: sätta in talet i de grafiska gränssnittet returnera
+		 * true
 		 */
 
 		/*
@@ -48,7 +46,7 @@ public class Sudoku {
 				return solve(row++, 0);
 			}
 			if (row >= 9) {
-				// vi är färdiga
+				// vi �r f�rdiga
 				return true;
 			}
 			if (column < 0) {
@@ -75,7 +73,8 @@ public class Sudoku {
 			} else {
 				return solve(row, column--);
 				// om värdet inte är ok, returnera false
-				// ska man först kolla om alla tal inmatade av användaren är ok?
+				// ska man först kolla om alla tal inmatade av användaren är
+				// ok?
 				// return false;
 			}
 		}
