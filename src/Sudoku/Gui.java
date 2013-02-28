@@ -14,9 +14,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class Gui extends JFrame {
 	List<JTextField> inputs;
 	JPanel sudoku;
+	
+	
 	public Gui() {
 		initUI();
 	}
@@ -25,7 +28,7 @@ public class Gui extends JFrame {
 
 		sudoku = new JPanel();
 		JPanel buttons = new JPanel();
-
+		
 		sudoku.setLayout(new GridLayout(9, 9));
 		buttons.setLayout(new FlowLayout());
 
@@ -48,6 +51,7 @@ public class Gui extends JFrame {
 
 		add(sudoku, BorderLayout.CENTER);
 		add(buttons, BorderLayout.SOUTH);
+		
 		setTitle("Sudoku");
 		setVisible(true);
 		setSize(500, 500);
@@ -96,7 +100,6 @@ public class Gui extends JFrame {
 				for (int k = 0; k < 9; k++) {
 
 					JTextField tmp = inputs.get(j);
-					//int tmpTal = field[i][j];
 					tmp.setText(Integer.toString(field[i][k]));
 					j++;
 				}
