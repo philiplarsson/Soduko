@@ -7,6 +7,10 @@ public class Sudoku {
 		field = new int[9][9];
 	}
 
+	public boolean solve() {
+		return solve(0,0);
+	}
+	
 	public boolean checkLegal(int row, int column, int n) {
 		// System.out.println(n);
 		/*
@@ -54,7 +58,7 @@ public class Sudoku {
 		return true;
 	}
 
-	public boolean solve(int row, int column) {
+	private boolean solve(int row, int column) {
 		if (column >= 9) {
 			return solve(++row, 0);
 		}
@@ -151,7 +155,7 @@ public class Sudoku {
 		s1.setup();
 		s1.printField();
 		System.out.println();
-		System.out.println("Sudokun status: " + s1.solve(0, 0));
+		System.out.println("Sudokun status: " + s1.solve());
 //		s1.solve(0,0);
 		System.out.println();
 		s1.printField();
