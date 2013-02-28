@@ -97,6 +97,7 @@ public class Gui extends JFrame {
 		}
 		// returns true if succeded
 		private boolean loadNbrsFromGui() {
+			
 			field = new int[9][9];
 			int j = 0;
 			int tmpTal = 0;
