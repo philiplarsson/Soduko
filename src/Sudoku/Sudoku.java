@@ -8,17 +8,15 @@ public class Sudoku {
 	}
 
 	public boolean checkLegal(int row, int column, int n) {
-		System.out.println(n);
+		// System.out.println(n);
 		/*
-		 * Kolla om n förekommer i det nuvarande rutfältet 3*3. Rundas int ner?
-		 * Kan man i så fall bestämma de olika större fälten genom att dela med
-		 * tre? Exempel: row/3 eller column/3 ger en int mellan 0-2.
+		 * Kolla om n förekommer i det nuvarande rutfältet 3*3.
 		 */
 
 		int startColumn = (column / 3) * 3;
 		int startRow = (row / 3) * 3;
-		
-		//förhindra att den kollar redan inskrivet tal
+
+		// förhindra att den kollar redan inskrivet tal
 		field[row][column] = 0;
 
 		for (int i = 0; i < 3; i++) {
@@ -57,59 +55,39 @@ public class Sudoku {
 	}
 
 	public boolean solve(int row, int column) {
-		//System.out.println();
-		//printField();
-		//System.out.println("Row: " + row + " Col: " + column);
+		if (column >= 9) {
+			return solve(++row, 0);
+		}
+		if (row >= 9) {
+			return true;
+		}
 		// RUTAN ÄR TOM
 		if (field[row][column] == 0) {
-			if (column >= 9) {
-				return solve(++row, 0);
-			}
-			if (row >= 9) {
-				// vi är färdiga
-				return true;
-			}
-			if (column < 0) {
-				return solve(--row, 8);
-			}
-			if (row < 0) {
-				// sudokun gick inte att lösa
-				return false;
-			}
-
+			
 			for (int i = 1; i <= 9; i++) {
-				if (checkLegal(row, column, i) == true) {
+				if (checkLegal(row, column, i)) {
 					field[row][column] = i;
-					return solve(row, ++column);
+					if (solve(row, column + 1)) {
+						return true;
+					}
 				}
 			}
-			// ingen av de 9 talen fungerar, gå tillbaka ett steg:
-			return solve(row, --column);
+			field[row][column] = 0;
+			return false;
 		}
+
 		// RUTAN ÄR IFYLLD AV ANVÄNDAREN
 		if (field[row][column] != 0) {
-			int n = field[row][column]; // sätt n till det värde som finns i
-										// field[row][column]
-			//System.out.println(n);
+			int n = field[row][column]; // sätt n till det värde som finns i field[row][column]
+
 			if (checkLegal(row, column, n)) { // testa om värdet är ok
-//				System.out.println("true");
-				return solve(row, ++column);
-			} else {
-//				System.out.println("not true");
-				return solve(row, --column);
-				// om värdet inte är ok, returnera false
-				// ska man först kolla om alla tal inmatade av användaren är ok?
-				// return false;
+				return solve(row, column + 1);	
 			}
 		}
 		return false;
 	}
 
-	public int put(int nbr) {
-		// Skriv in ett tal i rutan.
-		return 0;
-	}
-	
+
 	private void setup() {
 		field[0][0] = 9;
 		field[0][4] = 2;
@@ -147,36 +125,36 @@ public class Sudoku {
 		field[8][2] = 2;
 		field[8][4] = 4;
 		field[8][8] = 6;
-		for(int i = 0; i < 9;i++){
-			for(int j = 0; j < 9;j++){
-				if(field[i][j] < 1){
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				if (field[i][j] < 1) {
 					field[i][j] = 0;
 				}
 			}
-			
+
 		}
 
 	}
 
 	private void printField() {
-		for(int i = 0; i < 9;i++){
-			for(int j = 0; j < 9;j++){
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
 				System.out.print(field[i][j] + " ");
-				}
-			System.out.println();
 			}
-		
+			System.out.println();
+		}
+
 	}
-	
+
 	public static void main(String[] args) {
 		Sudoku s1 = new Sudoku();
 		s1.setup();
 		s1.printField();
-		s1.solve(0,0);
+		System.out.println();
+		System.out.println("Sudokun status: " + s1.solve(0, 0));
+//		s1.solve(0,0);
+		System.out.println();
 		s1.printField();
 	}
 
-	
-
-	
 }
