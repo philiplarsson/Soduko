@@ -6,13 +6,20 @@ public class Sudoku {
 	public Sudoku() {
 		field = new int[9][9];
 	}
+	
+	public Sudoku(int[][] field){
+		this.field = field;
+	}
 
 	public boolean solve() {
-		return solve(0,0);
+		return solve(0, 0);
 	}
 	
+	public int[][] getField(){
+		return field;
+	}
+
 	public boolean checkLegal(int row, int column, int n) {
-		// System.out.println(n);
 		/*
 		 * Kolla om n förekommer i det nuvarande rutfältet 3*3.
 		 */
@@ -67,7 +74,7 @@ public class Sudoku {
 		}
 		// RUTAN ÄR TOM
 		if (field[row][column] == 0) {
-			
+
 			for (int i = 1; i <= 9; i++) {
 				if (checkLegal(row, column, i)) {
 					field[row][column] = i;
@@ -82,15 +89,15 @@ public class Sudoku {
 
 		// RUTAN ÄR IFYLLD AV ANVÄNDAREN
 		if (field[row][column] != 0) {
-			int n = field[row][column]; // sätt n till det värde som finns i field[row][column]
+			int n = field[row][column]; // sätt n till det värde som finns i
+										// field[row][column]
 
 			if (checkLegal(row, column, n)) { // testa om värdet är ok
-				return solve(row, column + 1);	
+				return solve(row, column + 1);
 			}
 		}
 		return false;
 	}
-
 
 	private void setup() {
 		field[0][0] = 9;
@@ -156,7 +163,7 @@ public class Sudoku {
 		s1.printField();
 		System.out.println();
 		System.out.println("Sudokun status: " + s1.solve());
-//		s1.solve(0,0);
+		// s1.solve(0,0);
 		System.out.println();
 		s1.printField();
 	}
