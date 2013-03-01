@@ -18,7 +18,8 @@ public class Sudoku {
 	}
 	
 	/*
-	* Solves the Sudoku.
+	* Returns true if the Sudoku is solved.
+	* Else returns false.
 	*/
 	public boolean solve() {
 		return solve(0, 0);
@@ -36,11 +37,19 @@ public class Sudoku {
 	* Else returns false.
 	*/	
 	public boolean checkLegal(int row, int column, int n) {
-
+		
+		/*
+		* StartColumn and StartRow are used to move between
+		* the nine larger fields.
+		*/
 		int startColumn = (column / 3) * 3;
 		int startRow = (row / 3) * 3;
 		field[row][column] = 0;
 
+		/*
+		* Checks the 3*3 field if n already exists.
+		* Returns false if n already exists within this area.
+		*/
 		for (int i = 0; i < 3; i++) {
 			startRow = (row / 3) * 3;
 			for (int k = 0; k < 3; k++) {
@@ -53,13 +62,21 @@ public class Sudoku {
 			startColumn++;
 		}
 
+		/*
+		* Checks the row if n already exists.
+		* Returns false if row already contains n.
+		*/
 		for (int i = 0; i < 9; i++) {
 			if (field[row][i] == n) {
 				field[row][column] = n;
 				return false;
 			}
 		}
-
+		
+		/*
+		* Checks the column if n already exists.
+		* Returns false if column already contains n.
+		*/
 		for (int i = 0; i < 9; i++) {
 			if (field[i][column] == n) {
 				field[row][column] = n;
@@ -67,6 +84,10 @@ public class Sudoku {
 			}
 		}
 
+		/*
+		* Insertion of int n in field[row][column] is valid.
+		* Changes the values and returns true.
+		*/
 		field[row][column] = n;
 		return true;
 	}
@@ -75,11 +96,11 @@ public class Sudoku {
 	* Returns true if values input by user are valid.
 	*/
 	public boolean checkIfValuesOk() {
-		int tal;
+		int nbr;
 		for (int i = 0; i < 9; i++) {
 			for (int k = 0; k < 9; k++) {
-				tal = field[i][k];
-				if(tal == 0){
+				nbr = field[i][k];
+				if(nbr == 0){
 					// do nothing
 				} else if (!checkLegal(i, k, tal)) {
 					return false;
@@ -98,6 +119,7 @@ public class Sudoku {
 		if (column >= 9) {
 			return solve(++row, 0);
 		}
+		
 		if (row >= 9) {
 			return true;
 		}
@@ -116,20 +138,15 @@ public class Sudoku {
 			return false;
 		}
 
-		// RUTAN �R IFYLLD AV ANV�NDAREN
 		if (field[row][column] != 0) {
-			int n = field[row][column]; // s�tt n till det v�rde som finns i
-										// field[row][column]
+			int n = field[row][column]; 
 
-			if (checkLegal(row, column, n)) { // testa om v�rdet �r ok
+			if (checkLegal(row, column, n)) {
 				return solve(row, column + 1);
 			}
 		}
 		return false;
 	}
-
-	
-
 	/*
 	 * public static void main(String[] args) { Sudoku s1 = new Sudoku();
 	 * s1.setup(); s1.printField(); System.out.println();
@@ -138,5 +155,4 @@ public class Sudoku {
 	 * 
 	 * }
 	 */
-
 }
