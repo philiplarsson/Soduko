@@ -24,13 +24,18 @@ public class Gui extends JFrame {
 	private int field[][];
 	private Sudoku s1;
 
+	/*
+	* Creates Gui.
+	*/
 	public Gui() {
 		initUI();
-
 	}
 
+	/*
+	* Initializes the user interface.
+	*/
 	private void initUI() {
-
+		
 		sudoku = new JPanel();
 		buttons = new JPanel();
 
@@ -74,7 +79,6 @@ public class Gui extends JFrame {
 
 	private void colorMiniSudoku() {
 		// to be done?
-
 	}
 
 	class SolveButtonListener implements ActionListener {
@@ -92,7 +96,10 @@ public class Gui extends JFrame {
 
 		}
 		
-		// kollar om talen inmatade av användaren är ok
+		/*
+		* Returns true if number input by user is valid.
+		* Else returns false.
+		*/
 		private boolean checkIfOk() { 
 			if(!s1.checkIfValuesOk()){
 				JOptionPane.showMessageDialog(sudoku, "Value error",
@@ -102,13 +109,19 @@ public class Gui extends JFrame {
 			return true;
 		}
 
+		/*
+		* Comment needed.
+		*/
 		private void solveSudoku() {
 			if (!s1.solve()) {
 				JOptionPane.showMessageDialog(sudoku, "Sudoku is unsolvable",
 						"Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
-
+		
+		/*
+		* Comment needed.
+		*/
 		private void showNbrsInGui() {
 			field = s1.getField();
 			int j = 0;
@@ -123,19 +136,21 @@ public class Gui extends JFrame {
 
 		}
 
-		// returns true if succeded
+		/*
+		* Returns true if numbers were correctly loaded from the Gui.
+		*/
 		private boolean loadNbrsFromGui() {
 			field = new int[9][9];
 			int j = 0;
-			int tmpTal = 0;
+			int tmpNbr = 0;
 			for (int i = 0; i < 9; i++) {
 				for (int k = 0; k < 9; k++) {
 					JTextField tmp = inputs.get(j);
 					if (tmp.getText().trim().isEmpty()) {
-						tmpTal = 0;
+						tmpNbr = 0;
 					} else {
 						try {
-							tmpTal = Integer.parseInt(tmp.getText());
+							tmpNbr = Integer.parseInt(tmp.getText());
 						} catch (NumberFormatException error) {
 							tmp.setBackground(Color.RED);
 							JOptionPane.showMessageDialog(sudoku,
@@ -147,7 +162,7 @@ public class Gui extends JFrame {
 						}
 
 					}
-					if (tmpTal < 0 || tmpTal > 9) {
+					if (tmpNbr < 0 || tmpNbr > 9) {
 						tmp.setBackground(Color.RED);
 						JOptionPane.showMessageDialog(sudoku, "Wrong number "
 								+ (i + 1) + " col " + (k + 1), "Error",
@@ -155,7 +170,7 @@ public class Gui extends JFrame {
 						tmp.setBackground(Color.WHITE);
 						return false;
 					}
-					field[i][k] = tmpTal;
+					field[i][k] = tmpNbr;
 					j++;
 				}
 			}
@@ -163,6 +178,9 @@ public class Gui extends JFrame {
 		}
 	}
 
+	/*
+	* Comment needed.
+	*/
 	class ClearButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -173,6 +191,9 @@ public class Gui extends JFrame {
 		}
 	}
 
+	/*
+	* Starts the application.
+	*/
 	public static void main(String[] args) {
 		Gui g1 = new Gui();
 	}
