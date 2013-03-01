@@ -2,32 +2,43 @@ package Sudoku;
 
 public class Sudoku {
 	int[][] field;
-
+	
+	/*
+	* Creates a new Sudoku field.
+	*/
 	public Sudoku() {
 		field = new int[9][9];
 	}
-
+	
+	/*
+	* Creates a new Sudoku field with the parameter int[][] field.
+	*/
 	public Sudoku(int[][] field) {
 		this.field = field;
 	}
-
+	
+	/*
+	* Solves the Sudoku.
+	*/
 	public boolean solve() {
 		return solve(0, 0);
 	}
-
+	
+	/*
+	* Returns the field.
+	*/
 	public int[][] getField() {
 		return field;
 	}
-
+	
+	/*
+	* Returns true if inserting int n into field[row][column] is allowed.
+	* Else returns false.
+	*/	
 	public boolean checkLegal(int row, int column, int n) {
-		/*
-		 * Kolla om n förekommer i det nuvarande rutfältet 3*3.
-		 */
 
 		int startColumn = (column / 3) * 3;
 		int startRow = (row / 3) * 3;
-
-		// förhindra att den kollar redan inskrivet tal
 		field[row][column] = 0;
 
 		for (int i = 0; i < 3; i++) {
@@ -42,7 +53,6 @@ public class Sudoku {
 			startColumn++;
 		}
 
-		// Kolla sin rad om n förekommer.
 		for (int i = 0; i < 9; i++) {
 			if (field[row][i] == n) {
 				field[row][column] = n;
@@ -50,7 +60,6 @@ public class Sudoku {
 			}
 		}
 
-		// Kolla om n förekommer i kolumnen.
 		for (int i = 0; i < 9; i++) {
 			if (field[i][column] == n) {
 				field[row][column] = n;
@@ -58,15 +67,13 @@ public class Sudoku {
 			}
 		}
 
-		/*
-		 * Om allt ok: sätta in talet i de grafiska gränssnittet returnera true
-		 */
 		field[row][column] = n;
 		return true;
 	}
 
-	// kontrollerar om alla värden som inte är 0 (dvs de värden som användaren har matat in) är ok
-	// detta för att förhindra att programmet tar lång tid på sig vid dubletter
+	/*
+	* Returns true if values input by user are valid.
+	*/
 	public boolean checkIfValuesOk() {
 		int tal;
 		for (int i = 0; i < 9; i++) {
@@ -82,7 +89,11 @@ public class Sudoku {
 
 		return true;
 	}
-
+	
+	/*
+	* Returns true if the sudoku is solvable.
+	* Else returns false.
+	*/
 	private boolean solve(int row, int column) {
 		if (column >= 9) {
 			return solve(++row, 0);
@@ -90,7 +101,7 @@ public class Sudoku {
 		if (row >= 9) {
 			return true;
 		}
-		// RUTAN ÄR TOM
+
 		if (field[row][column] == 0) {
 
 			for (int i = 1; i <= 9; i++) {
@@ -105,12 +116,12 @@ public class Sudoku {
 			return false;
 		}
 
-		// RUTAN ÄR IFYLLD AV ANVÄNDAREN
+		// RUTAN ï¿½R IFYLLD AV ANVï¿½NDAREN
 		if (field[row][column] != 0) {
-			int n = field[row][column]; // sätt n till det värde som finns i
+			int n = field[row][column]; // sï¿½tt n till det vï¿½rde som finns i
 										// field[row][column]
 
-			if (checkLegal(row, column, n)) { // testa om värdet är ok
+			if (checkLegal(row, column, n)) { // testa om vï¿½rdet ï¿½r ok
 				return solve(row, column + 1);
 			}
 		}
