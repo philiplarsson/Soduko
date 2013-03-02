@@ -156,7 +156,7 @@ public class Gui extends JFrame {
 			if (thisSudoku >= nbrOfSoduku) {
 				thisSudoku = 0;
 			}
-			
+
 			clearGui();
 			showNbrsInGui();
 
@@ -249,7 +249,7 @@ public class Gui extends JFrame {
 		}
 	}
 
-	class CheckButtonListener implements ActionListener {
+	private class CheckButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (!loadNbrsFromGui()) {
 				return;
@@ -356,19 +356,19 @@ public class Gui extends JFrame {
 	/*
 	 * Comment needed.
 	 */
-	class ClearButtonListener implements ActionListener {
+	private class ClearButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			clearGui();
 		}
 
-		
 	}
+
 	private void clearGui() {
 		for (int i = 0; i < inputs.size(); i++) {
 			JTextField tmp = inputs.get(i);
 			tmp.setText("");
 		}
-		
+
 	}
 
 	/*
