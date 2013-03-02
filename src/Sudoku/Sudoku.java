@@ -1,5 +1,7 @@
 package Sudoku;
 
+import java.util.Arrays;
+
 public class Sudoku {
 	int[][] field;
 	
@@ -15,6 +17,7 @@ public class Sudoku {
 	*/
 	public Sudoku(int[][] field) {
 		this.field = field;
+	
 	}
 	
 	/*
@@ -111,6 +114,21 @@ public class Sudoku {
 		return true;
 	}
 	
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		
+		for(int i = 0; i < 0; i++){
+			for(int k = 0; k < 9; k++){
+				sb.append(field[i][k]);
+			}
+			sb.append("\n");
+		}
+		
+		return sb.toString();
+	}
+
 	/*
 	* Returns true if the sudoku is solvable.
 	* Else returns false.
