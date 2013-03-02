@@ -19,9 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import Sudoku.CopyOfGui.CheckButtonListener;
-import Sudoku.CopyOfGui.NewButtonListener;
-
 @SuppressWarnings("serial")
 public class Gui extends JFrame {
 	private final String FILENAME = "SudokuFile.txt";
@@ -30,17 +27,21 @@ public class Gui extends JFrame {
 	private JPanel buttons;
 	private int field[][];
 	private Sudoku s1;
+	private List<Sudoku> sudokus;
+	private int nbrOfSoduku;
+	private int thisSudoku = 0;
+	private boolean firstTimeRunning = true;
 
 	/*
-	* Creates Gui.
-	*/
+	 * Creates Gui.
+	 */
 	public Gui() {
 		initUI();
 	}
 
 	/*
-	* Initializes the user interface.
-	*/
+	 * Initializes the user interface.
+	 */
 	private void initUI() {
 		sudoku = new JPanel();
 		buttons = new JPanel();
@@ -63,15 +64,14 @@ public class Gui extends JFrame {
 
 		bClear.setToolTipText("Clears the entire soduko");
 		bSolve.setToolTipText("Solves the soduko");
-		
+
 		bClear.setMnemonic(KeyEvent.VK_C);
 		bSolve.setMnemonic(KeyEvent.VK_S);
-		
+
 		buttons.add(bClear);
 		buttons.add(bSolve);
 		buttons.add(bNew);
 		buttons.add(bCheck);
-
 
 		bSolve.addActionListener(new SolveButtonListener());
 		bClear.addActionListener(new ClearButtonListener());
@@ -132,7 +132,7 @@ public class Gui extends JFrame {
 				return;
 			}
 			s1 = new Sudoku(field);
-			if(!checkIfOk()){
+			if (!checkIfOk()) {
 				return;
 			}
 			solveSudoku();
@@ -140,172 +140,240 @@ public class Gui extends JFrame {
 
 		}
 	}
-	
-		
-		class NewButtonListener implements ActionListener {
-			public void actionPerformed(ActionEvent e) {
-				field = new int[9][9];
-				
-				readFromFile();
-				s1 = new Sudoku(field);
-				showNbrsInGui();
 
+	class NewButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (firstTimeRunning) {
+				field = new int[9][9];
+				sudokus = new ArrayList<Sudoku>();
+				readInNbrOfSudokus();
+				readInSodukos();
+			}
+			firstTimeRunning = false;
+
+			s1 = sudokus.get(thisSudoku);
+			thisSudoku++;
+			if (thisSudoku >= nbrOfSoduku) {
+				thisSudoku = 0;
+			}
 			
+			clearGui();
+			showNbrsInGui();
+
+		}
+
+		private void readInSodukos() {
+
+			Scanner s = null;
+			try {
+				s = new Scanner(new File(FILENAME));
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(sudoku, "File " + FILENAME
+						+ " could not load", "New Soduko",
+						JOptionPane.ERROR_MESSAGE);
+				System.exit(1);
 			}
 
-			private void readFromFile() {
-				Scanner s = null;
-				try {
-					s = new Scanner(new File(FILENAME));
-				} catch (FileNotFoundException e) {
-					JOptionPane.showMessageDialog(sudoku, "File " + FILENAME
-							+ " could not load", "New Soduko",
-							JOptionPane.ERROR_MESSAGE);
-					System.exit(1);
-				}
-
+			for (int k = 0; k < nbrOfSoduku; k++) {
+				int tmpField[][] = new int[9][9];
 				int row = 0;
 				int col;
-				for(int i = 0; i < 9; i++){
+				for (int i = 0; i < 9; i++) {
 					String line = s.nextLine();
-
 					Scanner lineScanner = new Scanner(line);
-					
 					col = 0;
 					while (lineScanner.hasNext()) {
 						String nextToken = lineScanner.next();
-						field[row][col] = Integer.parseInt(nextToken);
+						tmpField[row][col] = Integer.parseInt(nextToken);
 						col++;
 					}
 					row++;
 				}
+				sudokus.add(new Sudoku(tmpField));
+
 			}
 		}
 
-		class CheckButtonListener implements ActionListener {
-			public void actionPerformed(ActionEvent e) {
-				if (!loadNbrsFromGui()) {
-					return;
+		private void readInNbrOfSudokus() {
+			int nbrOfIntLines = 0;
+			Scanner s = null;
+			try {
+				s = new Scanner(new File(FILENAME));
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(sudoku, "File " + FILENAME
+						+ " could not load", "New Soduko",
+						JOptionPane.ERROR_MESSAGE);
+				System.exit(1);
+			}
+
+			String line = s.nextLine();
+
+			while (s.hasNextLine()) {
+
+				if (line.matches(".*\\d.*")) {
+					nbrOfIntLines++;
 				}
-				s1 = new Sudoku(field);
-				if (!checkIfOk()) {
-					return;
-				} else {
-					JOptionPane.showMessageDialog(sudoku, "Everything is OK",
-							"Check Soduko", JOptionPane.INFORMATION_MESSAGE);
-				}
-				showNbrsInGui();
+				line = s.nextLine();
+			}
 
-			}
-		}
-		
-		
-		/*
-		* Returns true if number input by user is valid.
-		* Else returns false.
-		*/
-		private boolean checkIfOk() { 
-			if(!s1.checkIfValuesOk()){
-				JOptionPane.showMessageDialog(sudoku, "Value error",
-						"Error", JOptionPane.ERROR_MESSAGE);
-				return false;
-			}
-			return true;
+			nbrOfSoduku = nbrOfIntLines / 9;
+
 		}
 
-		/*
-		* Comment needed.
-		*/
-		private void solveSudoku() {
-			if (!s1.solve()) {
-				JOptionPane.showMessageDialog(sudoku, "Sudoku is unsolvable",
-						"Error", JOptionPane.ERROR_MESSAGE);
+		private void readFromFile() {
+			Scanner s = null;
+			try {
+				s = new Scanner(new File(FILENAME));
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(sudoku, "File " + FILENAME
+						+ " could not load", "New Soduko",
+						JOptionPane.ERROR_MESSAGE);
+				System.exit(1);
 			}
-		}
-		
-		/*
-		* Comment needed.
-		*/
-		private void showNbrsInGui() {
-			field = s1.getField();
-			int j = 0;
+
+			int row = 0;
+			int col;
 			for (int i = 0; i < 9; i++) {
-				for (int k = 0; k < 9; k++) {
-					System.out.println(field[i][k]);
-					JTextField tmp = inputs.get(j);
-					if (field[i][k] == 0) {
-						// do nothing
-					} else {
-						tmp.setText(Integer.toString(field[i][k]));	
-					}
-					j++;
+				String line = s.nextLine();
+
+				Scanner lineScanner = new Scanner(line);
+
+				col = 0;
+				while (lineScanner.hasNext()) {
+					String nextToken = lineScanner.next();
+					field[row][col] = Integer.parseInt(nextToken);
+					col++;
 				}
-			}
-
-		}
-
-		/*
-		* Returns true if numbers were correctly loaded from the Gui.
-		*/
-		private boolean loadNbrsFromGui() {
-			field = new int[9][9];
-			int j = 0;
-			int tmpTal = 0;
-			for (int i = 0; i < 9; i++) {
-				for (int k = 0; k < 9; k++) {
-					JTextField tmp = inputs.get(j);
-					if (tmp.getText().trim().isEmpty()) {
-						tmpTal = 0;
-					} else {
-						try {
-							tmpTal = Integer.parseInt(tmp.getText());
-						} catch (NumberFormatException error) {
-							Color tmpColor = tmp.getBackground();
-							tmp.setBackground(Color.RED);
-							JOptionPane.showMessageDialog(sudoku,
-									"Not number in row " + (i + 1) + " col "
-											+ (k + 1), "Error",
-									JOptionPane.ERROR_MESSAGE);
-							tmp.setBackground(tmpColor);
-							return false;
-						}
-
-					}
-					if (tmpTal < 0 || tmpTal > 9) {
-						Color tmpColor = tmp.getBackground();
-						tmp.setBackground(Color.RED);
-
-						JOptionPane.showMessageDialog(sudoku, "Wrong number "
-								+ (i + 1) + " col " + (k + 1), "Error",
-								JOptionPane.ERROR_MESSAGE);
-
-						tmp.setBackground(tmpColor);
-						return false;
-					}
-					field[i][k] = tmpTal;
-					j++;
-				}
-			}
-			return true;
-		}
-	
-
-	/*
-	* Comment needed.
-	*/
-	class ClearButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-
-			for (int i = 0; i < inputs.size(); i++) {
-				JTextField tmp = inputs.get(i);
-				tmp.setText("");
+				row++;
 			}
 		}
 	}
 
+	class CheckButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (!loadNbrsFromGui()) {
+				return;
+			}
+			s1 = new Sudoku(field);
+			if (!checkIfOk()) {
+				return;
+			} else {
+				JOptionPane.showMessageDialog(sudoku, "Everything is OK",
+						"Check Soduko", JOptionPane.INFORMATION_MESSAGE);
+			}
+			showNbrsInGui();
+
+		}
+	}
+
 	/*
-	* Starts the application.
-	*/
+	 * Returns true if number input by user is valid. Else returns false.
+	 */
+	private boolean checkIfOk() {
+		if (!s1.checkIfValuesOk()) {
+			JOptionPane.showMessageDialog(sudoku, "Value error", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
+	}
+
+	/*
+	 * Comment needed.
+	 */
+	private void solveSudoku() {
+		if (!s1.solve()) {
+			JOptionPane.showMessageDialog(sudoku, "Sudoku is unsolvable",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/*
+	 * Comment needed.
+	 */
+	private void showNbrsInGui() {
+		field = s1.getField();
+		int j = 0;
+		for (int i = 0; i < 9; i++) {
+			for (int k = 0; k < 9; k++) {
+				JTextField tmp = inputs.get(j);
+				if (field[i][k] == 0) {
+					// do nothing
+				} else {
+					tmp.setText(Integer.toString(field[i][k]));
+				}
+				j++;
+			}
+		}
+
+	}
+
+	/*
+	 * Returns true if numbers were correctly loaded from the Gui.
+	 */
+	private boolean loadNbrsFromGui() {
+		field = new int[9][9];
+		int j = 0;
+		int tmpTal = 0;
+		for (int i = 0; i < 9; i++) {
+			for (int k = 0; k < 9; k++) {
+				JTextField tmp = inputs.get(j);
+				if (tmp.getText().trim().isEmpty()) {
+					tmpTal = 0;
+				} else {
+					try {
+						tmpTal = Integer.parseInt(tmp.getText());
+					} catch (NumberFormatException error) {
+						Color tmpColor = tmp.getBackground();
+						tmp.setBackground(Color.RED);
+						JOptionPane.showMessageDialog(sudoku,
+								"Not number in row " + (i + 1) + " col "
+										+ (k + 1), "Error",
+								JOptionPane.ERROR_MESSAGE);
+						tmp.setBackground(tmpColor);
+						return false;
+					}
+
+				}
+				if (tmpTal < 0 || tmpTal > 9) {
+					Color tmpColor = tmp.getBackground();
+					tmp.setBackground(Color.RED);
+
+					JOptionPane.showMessageDialog(sudoku, "Wrong number "
+							+ (i + 1) + " col " + (k + 1), "Error",
+							JOptionPane.ERROR_MESSAGE);
+
+					tmp.setBackground(tmpColor);
+					return false;
+				}
+				field[i][k] = tmpTal;
+				j++;
+			}
+		}
+		return true;
+	}
+
+	/*
+	 * Comment needed.
+	 */
+	class ClearButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			clearGui();
+		}
+
+		
+	}
+	private void clearGui() {
+		for (int i = 0; i < inputs.size(); i++) {
+			JTextField tmp = inputs.get(i);
+			tmp.setText("");
+		}
+		
+	}
+
+	/*
+	 * Starts the application.
+	 */
 	public static void main(String[] args) {
 		Gui g1 = new Gui();
 	}
