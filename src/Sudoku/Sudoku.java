@@ -102,7 +102,7 @@ public class Sudoku {
 				nbr = field[i][k];
 				if(nbr == 0){
 					// do nothing
-				} else if (!checkLegal(i, k, tal)) {
+				} else if (!checkLegal(i, k, nbr)) {
 					return false;
 				}
 			}
