@@ -1,6 +1,5 @@
 package Sudoku;
 
-import java.util.Arrays;
 
 public class Sudoku {
 	int[][] field;
