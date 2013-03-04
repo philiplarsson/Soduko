@@ -37,7 +37,9 @@ public class Gui extends JFrame {
 	 */
 	public Gui() {
 		initUI();
+		colorMiniSudoku();
 	}
+
 
 	/*
 	 * Initializes the user interface.
@@ -81,13 +83,27 @@ public class Gui extends JFrame {
 		add(sudoku, BorderLayout.CENTER);
 		add(buttons, BorderLayout.SOUTH);
 
-		colorMiniSudoku();
+	
 		setTitle("Sudoku");
 		setVisible(true);
 		setSize(500, 500);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+	}
+	
+	private void makeBoxesUneditable() {
+		for(int i = 0; i < inputs.size(); i++){
+			JTextField tmp = inputs.get(i);
+			tmp.setEditable(false);
+		}
+	}
+	
+	private void makeBoxesEditable() {
+		for(int i = 0; i < inputs.size(); i++){
+			JTextField tmp = inputs.get(i);
+			tmp.setEditable(true);
+		}
 	}
 
 	private void colorMiniSudoku() {
@@ -158,6 +174,7 @@ public class Gui extends JFrame {
 			}
 
 			clearGui();
+			makeBoxesUneditable();
 			showNbrsInGui();
 
 		}
@@ -220,33 +237,6 @@ public class Gui extends JFrame {
 
 		}
 
-		private void readFromFile() {
-			Scanner s = null;
-			try {
-				s = new Scanner(new File(FILENAME));
-			} catch (FileNotFoundException e) {
-				JOptionPane.showMessageDialog(sudoku, "File " + FILENAME
-						+ " could not load", "New Soduko",
-						JOptionPane.ERROR_MESSAGE);
-				System.exit(1);
-			}
-
-			int row = 0;
-			int col;
-			for (int i = 0; i < 9; i++) {
-				String line = s.nextLine();
-
-				Scanner lineScanner = new Scanner(line);
-
-				col = 0;
-				while (lineScanner.hasNext()) {
-					String nextToken = lineScanner.next();
-					field[row][col] = Integer.parseInt(nextToken);
-					col++;
-				}
-				row++;
-			}
-		}
 	}
 
 	private class CheckButtonListener implements ActionListener {
@@ -285,6 +275,8 @@ public class Gui extends JFrame {
 		if (!s1.solve()) {
 			JOptionPane.showMessageDialog(sudoku, "Sudoku is unsolvable",
 					"Error", JOptionPane.ERROR_MESSAGE);
+		} else {
+			makeBoxesUneditable();
 		}
 	}
 
@@ -298,7 +290,7 @@ public class Gui extends JFrame {
 			for (int k = 0; k < 9; k++) {
 				JTextField tmp = inputs.get(j);
 				if (field[i][k] == 0) {
-					// do nothing
+					tmp.setEditable(true);
 				} else {
 					tmp.setText(Integer.toString(field[i][k]));
 				}
@@ -359,6 +351,7 @@ public class Gui extends JFrame {
 	private class ClearButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			clearGui();
+			makeBoxesEditable();
 		}
 
 	}
