@@ -65,7 +65,7 @@ public class Sudoku {
 		}
 
 		/*
-		* Checks the row if n already exists.
+		* Checks the column if n already exists.
 		* Returns false if row already contains n.
 		*/
 		for (int i = 0; i < 9; i++) {
@@ -76,7 +76,7 @@ public class Sudoku {
 		}
 		
 		/*
-		* Checks the column if n already exists.
+		* Checks the row if n already exists.
 		* Returns false if column already contains n.
 		*/
 		for (int i = 0; i < 9; i++) {
@@ -113,7 +113,7 @@ public class Sudoku {
 		return true;
 	}
 	
-	
+	/*
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -127,11 +127,9 @@ public class Sudoku {
 		
 		return sb.toString();
 	}
-
-	/*
-	* Returns true if the sudoku is solvable.
-	* Else returns false.
 	*/
+
+
 	private boolean solve(int row, int column) {
 		if (column >= 9) {
 			return solve(++row, 0);
@@ -164,12 +162,5 @@ public class Sudoku {
 		}
 		return false;
 	}
-	/*
-	 * public static void main(String[] args) { Sudoku s1 = new Sudoku();
-	 * s1.setup(); s1.printField(); System.out.println();
-	 * System.out.println("Sudokun status: " + s1.solve()); // s1.solve(0,0);
-	 * System.out.println(); s1.printField();
-	 * 
-	 * }
-	 */
+	
 }
