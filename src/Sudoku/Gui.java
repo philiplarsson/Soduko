@@ -31,7 +31,7 @@ public class Gui extends JFrame {
 	private int nbrOfSoduku;
 	private int thisSudoku = 0;
 
-	/*
+	/**
 	 * Creates Gui.
 	 */
 	public Gui() {
@@ -39,9 +39,6 @@ public class Gui extends JFrame {
 		colorMiniSudoku();
 	}
 
-	/*
-	 * Initializes the user interface.
-	 */
 	private void initUI() {
 		sudoku = new JPanel();
 		buttons = new JPanel();
@@ -255,7 +252,6 @@ public class Gui extends JFrame {
 		}
 	}
 
-
 	private boolean checkIfOk() {
 		if (!s1.checkIfValuesOk()) {
 			JOptionPane.showMessageDialog(sudoku, "Value error", "Error",
@@ -265,9 +261,6 @@ public class Gui extends JFrame {
 		return true;
 	}
 
-	/*
-	 * Comment needed.
-	 */
 	private void solveSudoku() {
 		if (!s1.solve()) {
 			JOptionPane.showMessageDialog(sudoku, "Sudoku is unsolvable",
@@ -277,9 +270,6 @@ public class Gui extends JFrame {
 		}
 	}
 
-	/*
-	 * Comment needed.
-	 */
 	private void showNbrsInGui() {
 		field = s1.getField();
 		int j = 0;
@@ -297,9 +287,6 @@ public class Gui extends JFrame {
 
 	}
 
-	/*
-	 * Returns true if numbers were correctly loaded from the Gui.
-	 */
 	private boolean loadNbrsFromGui() {
 		field = new int[9][9];
 		int j = 0;
@@ -342,7 +329,6 @@ public class Gui extends JFrame {
 		return true;
 	}
 
-
 	private class ClearButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			clearGui();
@@ -359,7 +345,7 @@ public class Gui extends JFrame {
 
 	}
 
-	/*
+	/**
 	 * Starts the application.
 	 */
 	public static void main(String[] args) {
