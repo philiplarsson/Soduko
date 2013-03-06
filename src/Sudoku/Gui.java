@@ -30,7 +30,6 @@ public class Gui extends JFrame {
 	private List<Sudoku> sudokus;
 	private int nbrOfSoduku;
 	private int thisSudoku = 0;
-	private boolean firstTimeRunning = true;
 
 	/*
 	 * Creates Gui.
@@ -39,7 +38,6 @@ public class Gui extends JFrame {
 		initUI();
 		colorMiniSudoku();
 	}
-
 
 	/*
 	 * Initializes the user interface.
@@ -83,24 +81,23 @@ public class Gui extends JFrame {
 		add(sudoku, BorderLayout.CENTER);
 		add(buttons, BorderLayout.SOUTH);
 
-	
-		setTitle("Sudoku");
+		setTitle("Sudoku Solver");
 		setVisible(true);
 		setSize(500, 500);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 	}
-	
+
 	private void makeBoxesUneditable() {
-		for(int i = 0; i < inputs.size(); i++){
+		for (int i = 0; i < inputs.size(); i++) {
 			JTextField tmp = inputs.get(i);
 			tmp.setEditable(false);
 		}
 	}
-	
+
 	private void makeBoxesEditable() {
-		for(int i = 0; i < inputs.size(); i++){
+		for (int i = 0; i < inputs.size(); i++) {
 			JTextField tmp = inputs.get(i);
 			tmp.setEditable(true);
 		}
@@ -159,13 +156,10 @@ public class Gui extends JFrame {
 
 	class NewButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (firstTimeRunning) {
-				field = new int[9][9];
-				sudokus = new ArrayList<Sudoku>();
-				readInNbrOfSudokus();
-				readInSodukos();
-			}
-			firstTimeRunning = false;
+			field = new int[9][9];
+			sudokus = new ArrayList<Sudoku>();
+			readInNbrOfSudokus();
+			readInSodukos();
 
 			s1 = sudokus.get(thisSudoku);
 			thisSudoku++;
@@ -196,15 +190,20 @@ public class Gui extends JFrame {
 				int row = 0;
 				int col;
 				for (int i = 0; i < 9; i++) {
+
 					String line = s.nextLine();
-					Scanner lineScanner = new Scanner(line);
-					col = 0;
-					while (lineScanner.hasNext()) {
-						String nextToken = lineScanner.next();
-						tmpField[row][col] = Integer.parseInt(nextToken);
-						col++;
+					if (line.length() == 0) {
+						i--;
+					} else {
+						Scanner lineScanner = new Scanner(line);
+						col = 0;
+						while (lineScanner.hasNext()) {
+							String nextToken = lineScanner.next();
+							tmpField[row][col] = Integer.parseInt(nextToken);
+							col++;
+						}
+						row++;
 					}
-					row++;
 				}
 				sudokus.add(new Sudoku(tmpField));
 
@@ -256,9 +255,7 @@ public class Gui extends JFrame {
 		}
 	}
 
-	/*
-	 * Returns true if number input by user is valid. Else returns false.
-	 */
+
 	private boolean checkIfOk() {
 		if (!s1.checkIfValuesOk()) {
 			JOptionPane.showMessageDialog(sudoku, "Value error", "Error",
@@ -345,9 +342,7 @@ public class Gui extends JFrame {
 		return true;
 	}
 
-	/*
-	 * Comment needed.
-	 */
+
 	private class ClearButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			clearGui();
